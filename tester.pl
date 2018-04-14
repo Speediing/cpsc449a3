@@ -22,10 +22,12 @@ machine(6).
 machine(7).
 machine(8).
 
-toonear(a,a).
-forcedpartial(a,0).
-forbidden(a,0).
-
+bad(1).
+bad(2).
+bad(b).
+bad(c).
+bad([a]).
+bad([b]).
 findlowest:-
 	forall(testnode(X,Y),anus(X,Y)).
 	
@@ -39,12 +41,12 @@ anus(X,Y):-
 	  retractall(lowpen(Z)),
 	  asserta(lowpen(X))
 	).
-	
-:-dynamic lowlist/1.
-:-dynamic lowpen/1.
 lowlist([]).
 lowpen(9999999999999999).
-
+:-dynamic(
+lowlist/1,
+lowpen/1
+).
 
 nodevalid(0,[]).
 nodevalid(Something, [H|T]) :-
@@ -55,88 +57,58 @@ nodevalid(Something, [H|T]) :-
 	reverse(TR,TRR),
 	nodevalid(Something_less, TRR).
 	
+
 correctassign([]).
 correctassign([T|H]) :-
 	task(T),
 	correctassign(H).
-
 	
-%toonear(a,b).
-%toonear(g,f).
-%toonear(b,c).
-%toonear(d,e).
 
-%forcedpartial(a,1).
-%forcedpartial(b,2).
-%forcedpartial(c,3).
-%forcedpartial(d,4).
-%forcedpartial(e,5).
+toonear(a,b).
+toonear(g,f).
+forcedpartial(a,3).
 
-%forbidden(a,2).
-%forbidden(b,2).
-%forbidden(c,2).
-%forbidden(d,2).
-%forbidden(e,2).
-
-hardcons(List):-
-	not(tntcheck(List)),
-	fpcheck(List),
-	fmcheck(List).
-
-tntcheck(Inputlist):-
+tncheck(Inputlist):-
 	forall(toonear(X,Y),closecheck(Inputlist,X,Y)).
 
-length_1(0,[]).
-length_1(L+1, [H|T]) :- length_1(L,T).
-
 closecheck(Inputlist,X,Y):-
-	X==Y;
-	proper_length(Inputlist,8),
-	Imputlist = [H|T],
-	reverse(Inputlist,Rinputlist),
-	Rinputlist = [HR|TR],
-	X==HR,
-	Y==H;
-	length_1(L,Inputlist),
-	M is L,
-	nth1(M,Inputlist,W),	
-	N is L-1,
-	nth1(N,Inputlist,V),
-	X==V,
-	Y==W.
+	append([X],[Y],Z1),
+	append([Y],[X],Z2),
+	not(sublist(Z1,Inputlist)),
+	not(sublist(Z2,Inputlist)).
 	
-	/*append([X],[Y],Z1),
-	not(subzlist(Z1,Inputlist)).*/
-	
-fpcheck(Inputlist):-
-	forall(forcedpartial(X,Y),forcedtaskcheck(Inputlist,X,Y)).
-	
-forcedtaskcheck(List,X,Y):-
-	not(proper_length(List,Y));
-	proper_length(List,Y),
-	last(List,X).	
-	
-fmcheck(Inputlist):-
-	forall(forbidden(X,Y),forbiddencheck(Inputlist,X,Y)).
-
-forbiddencheck(List,X,Y):-
-	not(proper_length(List,Y));
-	proper_length(List,Y),
-	not(last(List,X)).
+fpcheck(Inlist,Indepth):-
+	forcedpartial(X,Y),
+	reverse(Inputlist,Reversed),
+	Reversed=[H|T],
+	Y=Inputdepth,
+	H=X.
 
 nodegrow(8,Y) :-
 	asserta(node(8,Y)).
 nodegrow(X,Y) :-
-	write("nodegrow"),
-	write(Y),
 	X2 is X+1,
 	subtract([a,b,c,d,e,f,g,h],Y,Remaining),
 	branchalot(X2,Y,Remaining).
 	
 branchalot(X,Y,[]).
 branchalot(X,Y,[H|T]) :-
-	write("branchalot"),
-	write(Y),
+
 	append(Y,[H],Total),
-	nodegrow(X,Total),
+	masterrule(X, Y) -> nodegrow(X,Total),
+
 	branchalot(X,Y,T).
+	
+sublist( [], _ ).
+sublist( [X|XS], [X|XSS] ) :- sublist( XS, XSS ).
+sublist( [X|XS], [_|XSS] ) :- sublist( [X|XS], XSS ).
+
+masterrule(Depth, Assignment ) :-
+	\+ (Assignment).
+
+
+machinepen(Input, Returnpen, Depth) :-
+    nth1(Depth, Input, Lastelement),
+    mc(Depth, Lastelement, Returnpen).
+
+	
