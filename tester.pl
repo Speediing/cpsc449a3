@@ -150,9 +150,67 @@ machinepen(Input, Returnpen, Depth) :-
  penalty(1, a, 4).
  penalty(1, b, 4).
  penalty(1, c, 5).
- penalty(2, d, 22).
- penalty(3, e, 21).
+ penalty(1, d, 22).
+ penalty(1, e, 21).
  penalty(1, f, 7).
+  penalty(1, g, 4).
+ penalty(1, h, 4).
+ penalty(2, a, 5).
+ penalty(2, b, 22).
+ penalty(2, c, 21).
+ penalty(2, d, 7).
+  penalty(2, e, 4).
+ penalty(2, f, 4).
+ penalty(2, g, 5).
+ penalty(2, h, 22).
+ penalty(3, a, 21).
+ penalty(3, b, 7).
+  penalty(3, c, 4).
+ penalty(3, d, 4).
+ penalty(3, e, 5).
+ penalty(3, f, 22).
+ penalty(3, g, 21).
+ penalty(3, h, 7).
+  penalty(4, a, 4).
+ penalty(4, b, 4).
+ penalty(4, c, 5).
+ penalty(4, d, 22).
+ penalty(4, e, 21).
+  penalty(4, f, 7).
+  penalty(4, g, 4).
+ penalty(4, h, 4).
+ penalty(5, a, 7).
+  penalty(5, b, 4).
+ penalty(5, c, 4).
+ penalty(5, d, 5).
+ penalty(5, e, 22).
+ penalty(5, f, 21).
+ penalty(5, g, 7).
+  penalty(5, g, 4).
+ penalty(6, a, 4).
+ penalty(6, b, 5).
+ penalty(6, c, 22).
+ penalty(6, d, 21).
+ penalty(6, e, 7).
+  penalty(6, f, 4).
+ penalty(6, g, 4).
+ penalty(6, h, 5).
+ penalty(7, a, 22).
+ penalty(7, b, 21).
+ penalty(7, c, 7).
+  penalty(7, d, 22).
+ penalty(7, e, 21).
+ penalty(7, f, 7).
+  penalty(7, g, 22).
+    penalty(7, h, 22).
+ penalty(8, a, 21).
+ penalty(8, b, 22).
+ penalty(8, c, 21).
+ penalty(8, d, 7).
+  penalty(8, e, 22).
+ penalty(8, f, 21).
+ penalty(8, g, 7).
+  penalty(8, h, 22).
  person(name,age).
 	
 youngest(penalty(Task, Machine, Penalty)) :-
