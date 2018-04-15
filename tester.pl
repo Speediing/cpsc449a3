@@ -121,22 +121,25 @@ forbiddencheck(List,X,Y):-
 	proper_length(List,Y),
 	not(last(List,X)).
 
-nodegrow(8,Y) :-
-	asserta(node(8,Y)).
-nodegrow(X,Y) :-
+nodegrow(8,Y,Z) :-
+	asserta(node(8,Y,Z)).
+nodegrow(X,Y,Z) :-
 	write("nodegrow"),
 	write(Y),
 	X2 is X+1,
 	subtract([a,b,c,d,e,f,g,h],Y,Remaining),
-	branchalot(X2,Y,Remaining).
+	branchalot(X2,Y,Z,Remaining).
 	
-branchalot(X,Y,[]).
-branchalot(X,Y,[H|T]) :-
+badnode([a,b]).
+	
+branchalot(X,Y,Z,[]).
+branchalot(X,Y,Z,[H|T]) :-
 	write("branchalot"),
 	write(Y),
 	append(Y,[H],Total),
-	nodegrow(X,Total),
-	branchalot(X,Y,T).
+
+	(not(badnode(Total))->nodegrow(X,Total,Z),branchalot(X,Y,Z,T);
+	branchalot(X,Y,Z,T)).
 
 masterrule(Depth, Assignment ) :-
 	\+ (Assignment).
@@ -219,3 +222,13 @@ youngest(penalty(Task, Machine, Penalty)) :-
 
 findPen(task, mach) :-
 	penalty(task, mach, X).
+
+checkTooNear([_],_).
+
+checkTooNear([H|T], PEN) :-
+	nth1(1, T, B),
+
+	( tooNearPenalities(H, B, PENVALUE) ->
+		PEN1 is PEN + PENVALUE,
+		check(T, PEN1); check(T, PEN)
+	).
