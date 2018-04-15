@@ -137,7 +137,8 @@ branchalot(X,Y,Z,[H|T]) :-
 	write("branchalot"),
 	write(Y),
 	append(Y,[H],Total),
-
+	length(Y,Len),
+	machinepen(Y,Z,Depth),
 	(not(badnode(Total))->nodegrow(X,Total,Z),branchalot(X,Y,Z,T);
 	branchalot(X,Y,Z,T)).
 
@@ -223,12 +224,20 @@ youngest(penalty(Task, Machine, Penalty)) :-
 findPen(task, mach) :-
 	penalty(task, mach, X).
 
-checkTooNear([_],_).
+checkTooNear([_],PEN2).
 
 checkTooNear([H|T], PEN) :-
-	nth1(1, T, B),
+	nth1(1, T, FirstElement),
 
-	( tooNearPenalities(H, B, PENVALUE) ->
+	( tooNearPenalities(H, FirstElement, PENVALUE) ->
 		PEN1 is PEN + PENVALUE,
-		check(T, PEN1); check(T, PEN)
+		write(PEN1),
+		checkTooNear(T, PEN1); checkTooNear(T, PEN)
+	).
+
+checkTooNearEnds([H|T],PEN) :-
+	nth1(7, T, LastElement),
+	( tooNearPenalities(LastElement, H, PENVALUE) ->
+		PEN1 is PEN + PENVALUE,
+		checkTooNear([H|T], PEN1); checkTooNear([H|T],PEN)
 	).
